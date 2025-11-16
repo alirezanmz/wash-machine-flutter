@@ -1,59 +1,44 @@
-import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
-import 'package:news_app_clean_architecture/features/daily_news/data/data_sources/remote/news_api_service.dart';
-import 'package:news_app_clean_architecture/features/daily_news/data/repository/article_repository_impl.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/repository/article_repository.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_article.dart';
-import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
-import 'features/daily_news/data/data_sources/local/app_database.dart';
-import 'features/daily_news/domain/usecases/get_saved_article.dart';
-import 'features/daily_news/domain/usecases/remove_article.dart';
-import 'features/daily_news/domain/usecases/save_article.dart';
-import 'features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:wash_app/domain/repositories/auth_repository.dart';
+import 'package:wash_app/domain/repositories/device_repository.dart';
+import 'package:wash_app/domain/repositories/file_repository.dart';
+import 'package:wash_app/domain/repositories/session_repository.dart';
+import 'package:wash_app/domain/repositories/telemetry_repository.dart';
+import 'package:wash_app/domain/usecases/get_live_telemetry.dart';
+import 'package:wash_app/domain/usecases/login_user.dart';
+import 'package:wash_app/domain/usecases/scan_device.dart';
+import 'package:wash_app/domain/usecases/start_session.dart';
+import 'package:wash_app/domain/usecases/stop_session.dart';
+import 'package:wash_app/domain/usecases/upload_file.dart';
+import 'package:wash_app/infrastructure/http/api_service.dart';
+import 'package:wash_app/infrastructure/repository_impl/auth_repository_impl.dart';
+import 'package:wash_app/infrastructure/repository_impl/device_repository_impl.dart';
+import 'package:wash_app/infrastructure/repository_impl/file_repository_impl.dart';
+import 'package:wash_app/infrastructure/repository_impl/session_repository_impl.dart';
+import 'package:wash_app/infrastructure/repository_impl/telemetry_repository_impl.dart';
 
 final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
-
-  final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-  sl.registerSingleton<AppDatabase>(database);
-  
   // Dio
   sl.registerSingleton<Dio>(Dio());
 
-  // Dependencies
-  sl.registerSingleton<NewsApiService>(NewsApiService(sl()));
+  // API Service
+  sl.registerSingleton<ApiService>(ApiService(sl()));
 
-  sl.registerSingleton<ArticleRepository>(
-    ArticleRepositoryImpl(sl(),sl())
-  );
-  
-  //UseCases
-  sl.registerSingleton<GetArticleUseCase>(
-    GetArticleUseCase(sl())
-  );
+  // Repositories
+  sl.registerSingleton<AuthRepository>(AuthRepositoryImpl(sl()));
+  sl.registerSingleton<DeviceRepository>(DeviceRepositoryImpl(sl()));
+  sl.registerSingleton<SessionRepository>(SessionRepositoryImpl(sl()));
+  sl.registerSingleton<TelemetryRepository>(TelemetryRepositoryImpl(sl()));
+  sl.registerSingleton<FileRepository>(FileRepositoryImpl(sl()));
 
-  sl.registerSingleton<GetSavedArticleUseCase>(
-    GetSavedArticleUseCase(sl())
-  );
-
-  sl.registerSingleton<SaveArticleUseCase>(
-    SaveArticleUseCase(sl())
-  );
-  
-  sl.registerSingleton<RemoveArticleUseCase>(
-    RemoveArticleUseCase(sl())
-  );
-
-
-  //Blocs
-  sl.registerFactory<RemoteArticlesBloc>(
-    ()=> RemoteArticlesBloc(sl())
-  );
-
-  sl.registerFactory<LocalArticleBloc>(
-    ()=> LocalArticleBloc(sl(),sl(),sl())
-  );
-
-
+  // Use Cases
+  sl.registerSingleton<LoginUser>(LoginUser(sl()));
+  sl.registerSingleton<ScanDevice>(ScanDevice(sl()));
+  sl.registerSingleton<StartSession>(StartSession(sl()));
+  sl.registerSingleton<StopSession>(StopSession(sl()));
+  sl.registerSingleton<GetLiveTelemetry>(GetLiveTelemetry(sl()));
+  sl.registerSingleton<UploadFile>(UploadFile(sl()));
 }

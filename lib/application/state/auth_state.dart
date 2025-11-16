@@ -24,8 +24,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final user = await _loginUser(username, email, role);
+      print('AuthStateNotifier.login: user = $user');
       state = state.copyWith(user: user, isLoading: false);
     } catch (e) {
+      print('AuthStateNotifier.login: error = $e');
       state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }

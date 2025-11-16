@@ -34,6 +34,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       );
 
       final authState = ref.read(authStateProvider);
+      print('LoginPage._login: authState.user = ${authState.user}');
       if (authState.user != null) {
         // Navigate to the QR scan page after successful login
         context.go('/scan');

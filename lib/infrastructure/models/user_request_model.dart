@@ -11,7 +11,7 @@ class UserRequestModel with _$UserRequestModel {
     required String role,
   }) = _UserRequestModel;
 
-  factory UserRequestModel.fromJson(Map<String, dynamic> json) => _$UserRequestModelFromJson(json);
+  factory UserRequestModel.fromJson(Map<String, dynamic> json) => _$$UserRequestModelImplFromJson(json);
 
-  // Map<String, dynamic> toJson() => _$UserRequestModelToJson(this);
+  Map<String, dynamic> toJson() => _$$UserRequestModelImplToJson(this as _$UserRequestModelImpl);
 }

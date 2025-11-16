@@ -15,19 +15,14 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
-UserModel _$UserModelFromJson(Map<String, dynamic> json) {
-  return _UserModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$UserModel {
   String get id => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   String get role => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-
-  /// Serializes this UserModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(name: '_links')
+  Map<String, dynamic> get links => throw _privateConstructorUsedError;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -41,7 +36,13 @@ abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
-  $Res call({String id, String username, String role, String email});
+  $Res call({
+    String id,
+    String username,
+    String role,
+    String email,
+    @JsonKey(name: '_links') Map<String, dynamic> links,
+  });
 }
 
 /// @nodoc
@@ -63,6 +64,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? username = null,
     Object? role = null,
     Object? email = null,
+    Object? links = null,
   }) {
     return _then(
       _value.copyWith(
@@ -82,6 +84,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
                 ? _value.email
                 : email // ignore: cast_nullable_to_non_nullable
                       as String,
+            links: null == links
+                ? _value.links
+                : links // ignore: cast_nullable_to_non_nullable
+                      as Map<String, dynamic>,
           )
           as $Val,
     );
@@ -97,7 +103,13 @@ abstract class _$$UserModelImplCopyWith<$Res>
   ) = __$$UserModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String username, String role, String email});
+  $Res call({
+    String id,
+    String username,
+    String role,
+    String email,
+    @JsonKey(name: '_links') Map<String, dynamic> links,
+  });
 }
 
 /// @nodoc
@@ -118,6 +130,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? username = null,
     Object? role = null,
     Object? email = null,
+    Object? links = null,
   }) {
     return _then(
       _$UserModelImpl(
@@ -137,23 +150,26 @@ class __$$UserModelImplCopyWithImpl<$Res>
             ? _value.email
             : email // ignore: cast_nullable_to_non_nullable
                   as String,
+        links: null == links
+            ? _value._links
+            : links // ignore: cast_nullable_to_non_nullable
+                  as Map<String, dynamic>,
       ),
     );
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(createToJson: false)
 class _$UserModelImpl implements _UserModel {
   const _$UserModelImpl({
     required this.id,
     required this.username,
     required this.role,
     required this.email,
-  });
-
-  factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UserModelImplFromJson(json);
+    @JsonKey(name: '_links') required final Map<String, dynamic> links,
+  }) : _links = links;
 
   @override
   final String id;
@@ -163,10 +179,18 @@ class _$UserModelImpl implements _UserModel {
   final String role;
   @override
   final String email;
+  final Map<String, dynamic> _links;
+  @override
+  @JsonKey(name: '_links')
+  Map<String, dynamic> get links {
+    if (_links is EqualUnmodifiableMapView) return _links;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_links);
+  }
 
   @override
   String toString() {
-    return 'UserModel(id: $id, username: $username, role: $role, email: $email)';
+    return 'UserModel(id: $id, username: $username, role: $role, email: $email, links: $links)';
   }
 
   @override
@@ -178,12 +202,19 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.role, role) || other.role == role) &&
-            (identical(other.email, email) || other.email == email));
+            (identical(other.email, email) || other.email == email) &&
+            const DeepCollectionEquality().equals(other._links, _links));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, username, role, email);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    username,
+    role,
+    email,
+    const DeepCollectionEquality().hash(_links),
+  );
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -192,11 +223,6 @@ class _$UserModelImpl implements _UserModel {
   @pragma('vm:prefer-inline')
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
       __$$UserModelImplCopyWithImpl<_$UserModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$UserModelImplToJson(this);
-  }
 }
 
 abstract class _UserModel implements UserModel {
@@ -205,10 +231,8 @@ abstract class _UserModel implements UserModel {
     required final String username,
     required final String role,
     required final String email,
+    @JsonKey(name: '_links') required final Map<String, dynamic> links,
   }) = _$UserModelImpl;
-
-  factory _UserModel.fromJson(Map<String, dynamic> json) =
-      _$UserModelImpl.fromJson;
 
   @override
   String get id;
@@ -218,6 +242,9 @@ abstract class _UserModel implements UserModel {
   String get role;
   @override
   String get email;
+  @override
+  @JsonKey(name: '_links')
+  Map<String, dynamic> get links;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.

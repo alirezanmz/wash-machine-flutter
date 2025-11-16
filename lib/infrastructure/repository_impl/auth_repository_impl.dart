@@ -31,7 +31,20 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<User> registerUser(String username, String email, String role) async {
     final userRequest = UserRequestModel(username: username, email: email, role: role);
     final response = await _apiService.dio.post('/appUsers', data: userRequest.toJson());
-    final userModel = UserModel.fromJson(response.data);
-    return UserModel.toEntityStatic(userModel);
+
+    if (response.statusCode == 201) {
+      final user = await getUserByUsername(username);
+      if (user != null) {
+        return user;
+      } else {
+        throw Exception('Failed to register user: Could not retrieve user after registration');
+      }
+    } else {
+      if (response.data is String) {
+        throw Exception(response.data);
+      } else {
+        throw Exception('Failed to register user');
+      }
+    }
   }
 }

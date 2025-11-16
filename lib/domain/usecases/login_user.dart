@@ -11,7 +11,8 @@ class LoginUser {
     if (user != null) {
       return user;
     } else {
-      return await repository.registerUser(username, email, role);
+      await repository.registerUser(username, email, role);
+      return (await repository.getUserByUsername(username))!;
     }
   }
 }
